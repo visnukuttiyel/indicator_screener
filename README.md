@@ -5,4 +5,7 @@ Filter scripts based on indicator value
 ```$ pip install -r requirements.txt```
 
 # running script
-```$ python -m main.py```
+```
+$ python -m main.py
+```
+Results can be found in sim_results folder
