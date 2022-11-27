@@ -1,0 +1,13 @@
+ticker:
+    lookback: 252
+    
+
+indicator:
+    bbwp:
+        name: BBWP
+        length: 13
+        squeeze_level: 20
+    # branch2:
+    #     name: Node 2
+    #     branch2-1:
+    #         name: Node 2-1

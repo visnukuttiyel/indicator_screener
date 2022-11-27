@@ -8,7 +8,7 @@ from indicator import get_bbwp, get_bbw2
 from filewriter import wrtie_to_file
 from tickers import CRYPTO_LIST, CRYPTO_LIST_HALF, NSE_LIST, NSE_MIDCAPS, CRYPTO_LIST_SHORT
 
-
+# Downloads data from trading view
 class DataReader():
     def __init__(self, interval = Interval.in_daily, lookback = 252, ticker_list = CRYPTO_LIST_SHORT):
         self.exchange = 'NSE' if 'NSE' in ticker_list else 'BINANCE'
@@ -17,7 +17,7 @@ class DataReader():
         self.ticker_list = ticker_list
         self.tv = TvDatafeed()
         self.data = {}
-        self.build_data_thread()
+        self.read_data_thread()
 
     def fetch_data(self, ticker):
         try:
@@ -27,11 +27,11 @@ class DataReader():
              self.tv = TvDatafeed()
         return True
    
-    def build_data(self):
+    def read_data(self):
         for ticker in tqdm(self.ticker_list):
             self.fetch_data(ticker)
 
-    def build_data_thread(self):
+    def read_data_thread(self):
         threads = []
         for ticker in tqdm(self.ticker_list):
                 process = Thread(target=self.fetch_data, args=[ticker])

@@ -33,5 +33,9 @@ def get_bbw2(price_close, length):
         if value < bbw[-1]:
             bbwp+= 1
 
-    bbwp = bbwp/np.count_nonzero(~np.isnan(bbw))*100
+    if np.count_nonzero(~np.isnan(bbw)) > 0:
+        bbwp = bbwp/np.count_nonzero(~np.isnan(bbw))*100
+    else:
+        bbwp = 100
+
     return bbwp

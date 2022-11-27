@@ -1,27 +1,25 @@
 
 from indicator import get_bbwp, get_bbw2
 from tickers import CRYPTO_LIST, CRYPTO_LIST_SHORT, NSE_LIST
-from datareader import *
+from databuilder import *
+import yaml
 
-data_reader = DataReader(ticker_list = CRYPTO_LIST_SHORT)
+with open('parameters.yaml') as f:
+    parameters = yaml.safe_load(f)
 
-# parameters
-length = 13
-squeeze_level = 10
+data = DataBuilder(parameters, interval = Interval.in_daily, ticker_list = CRYPTO_LIST).data.data
 
 
-def get_bbwp_squeezed(data_reader, length, squeeze_level):
+def get_bbwp_squeezed(data,  squeeze_level):
     bbwp_squeezed = {} 
-    bbwp_squeezed['Number of tickers analysed'] = len(data_reader.data)
-    for ticker in data_reader.data:
-        try:
-            bbwp = get_bbw2(data_reader.data[ticker]['close'], length)
-            if bbwp < squeeze_level and bbwp > 0 :
+    bbwp_squeezed['Number of tickers analysed'] = len(data)
+    for ticker in data:
+            bbwp = data[ticker]['BBWP'][0]
+            if bbwp <  squeeze_level and bbwp > 0 :
                 bbwp_squeezed[ticker] = bbwp
-        except:
-            pass
+
     return bbwp_squeezed
 
-bbwp_squeezed = get_bbwp_squeezed(data_reader, length, squeeze_level)    
+bbwp_squeezed = get_bbwp_squeezed(data, parameters['indicator']['bbwp']['squeeze_level'])    
 
 wrtie_to_file(bbwp_squeezed)
