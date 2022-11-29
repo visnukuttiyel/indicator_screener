@@ -11,7 +11,7 @@ def wrtie_to_file(data):
     file_name = os.getcwd() + "/sim_results/" + f"{datetime.datetime.now():%Y-%m-%d %H-%M-%S}" + extension
     print(file_name)
 
-    with open(file_name, 'w') as myfile:
+    with open(file_name, 'w',newline='', encoding='utf-8') as myfile:
         wr = csv.writer(myfile)
         for key in data:
             wr.writerow(['{} : {}'.format(key, data[key])])
