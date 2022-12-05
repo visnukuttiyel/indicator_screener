@@ -3,11 +3,12 @@ from indicator import get_bbwp, get_bbw2
 from tickers import CRYPTO_LIST, CRYPTO_LIST_SHORT, NSE_LIST
 from databuilder import *
 import yaml
+import pandas as pd
 
 with open('parameters.yaml') as f:
     parameters = yaml.safe_load(f)
 
-data = DataBuilder(parameters, interval = Interval.in_daily, ticker_list = CRYPTO_LIST).data.data
+data = DataBuilder(parameters, interval = Interval.in_daily, ticker_list = CRYPTO_LIST_SHORT).data.data
 
 
 def get_bbwp_squeezed(data,  squeeze_level):

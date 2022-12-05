@@ -1,6 +1,7 @@
 from tqdm import tqdm
 from threading import Thread
 import time
+import pandas as pd
 
 
 from tvDatafeed import TvDatafeed, Interval
@@ -16,15 +17,22 @@ class DataReader():
         self.lookback = lookback
         self.ticker_list = ticker_list
         self.tv = TvDatafeed()
-        self.data = {}
+        self.df = pd.DataFrame()
         self.read_data_thread()
 
+
     def fetch_data(self, ticker):
-        try:
-            self.data[ticker] = self.tv.get_hist(symbol=ticker, exchange= self.exchange, interval=self.interval, n_bars=self.lookback)
-        except:
-             self.data[ticker] = {}
-             self.tv = TvDatafeed()
+        # try:
+        data =  pd.DataFrame(self.tv.get_hist(symbol=ticker, exchange= self.exchange, interval=self.interval, n_bars=self.lookback))
+        data.set_index('symbol')
+
+        if self.df.empty:
+            self.df = data
+        else:
+           self.df = pd.concat([self.df, data])
+        # except:
+        #      self.df[ticker] = {}
+        #      self.tv = TvDatafeed()
         return True
    
     def read_data(self):
@@ -40,3 +48,7 @@ class DataReader():
                 threads.append(process)
         for process in tqdm(threads):
             process.join(10)
+
+    def reset_index(self):
+        self.df = self.df.reset_index(inplace=True)  
+        self.df =self.df.set_index('symbol')
